@@ -1,0 +1,113 @@
+1. scaler없이
+2. 데이터 유형 변경 없이
+
+
+
+
+RMSE: 53.2444 (KNN) 
+RMSE: 59.8094 (CART) 
+RMSE: 46.097 (RF) 
+RMSE: 49.7582 (GBM) 
+RMSE: 46.779 (XGBoost) 
+
+
+bsas 카테고리 개선 한것 
+RMSE: 52.2886 (KNN) 
+RMSE: 55.9638 (CART) 
+RMSE: 42.3541 (RF) 
+RMSE: 47.3652 (GBM) 
+RMSE: 42.7737 (XGBoost)
+----------
+Base 개선 안한 것
+RMSE: 50.5564 (KNN) 
+RMSE: 54.7818 (CART) 
+RMSE: 40.9315 (RF) 
+RMSE: 44.8526 (GBM) 
+RMSE: 41.1624 (XGBoost) 
+
+데이터 개선 안한 것 전처리 한 것
+RMSE: 51.5674 (KNN) 
+RMSE: 61.5747 (CART) 
+RMSE: 45.401 (RF) 
+RMSE: 47.3441 (GBM) 
+RMSE: 45.6608 (XGBoost) 
+
+-------
+Base 개선 안한 것 + min max로 변환
+
+RMSE: 48.0605 (KNN) 
+RMSE: 54.8272 (CART) 
+RMSE: 40.9324 (RF) 
+RMSE: 44.847 (GBM) 
+RMSE: 41.1624 (XGBoost) 
+
+
+데이터 전처리 한 것(분류 크게)
+RMSE: 51.2962 (KNN) 
+RMSE: 61.6122 (CART) 
+RMSE: 45.3864 (RF) 
+RMSE: 47.3441 (GBM) 
+RMSE: 45.6608 (XGBoost) 
+
+
+
+----
+데이터 전처리 한 것(분류 10개 이상으로)
+
+- 이상치 21개 이하
+RMSE: 48.4962 (KNN) 
+RMSE: 57.1933 (CART) 
+RMSE: 42.3202 (RF) 
+
+- 이상치 20개 이하 (원래 하던 방식)
+RMSE: 48.5025 (KNN) 
+RMSE: 55.6476 (CART) 
+RMSE: 42.1475 (RF) 
+RMSE: 44.4537 (GBM) 
+RMSE: 41.6933 (XGBoost)
+
+
+# 위의 특성을 기반으로 그룹화하고, 각 그룹에 대해 고유한 ID를 생성합니다.
+filled_data['building_id'] = filled_data.groupby(['State_Factor', 'building_class', 'facility_type', 'floor_area', 'year_built']).ngroup()
+RMSE: 48.3696 (KNN) 
+RMSE: 53.4755 (CART) 
+RMSE: 40.7984 (RF) 
+RMSE: 43.8539 (GBM) 
+RMSE: 40.6487 (XGBoost) 
+
+
+'facility_type'와 'energy_star_rating'을 이용해 시설 유형별 에너지 등급 평균열 추가
+
+energy_star_rating기 83~85
+RMSE: 47.4188 (KNN) 
+RMSE: 51.8867 (CART) 
+RMSE: 39.4536 (RF) 
+RMSE: 42.1053 (GBM) 
+RMSE: 39.9216 (XGBoost)
+
+energy_star_rating기 83~85 조건에서 이상치 제거하지 않은 경우
+RMSE: 48.4342 (KNN) 
+RMSE: 53.044 (CART) 
+RMSE: 40.1671 (RF) 
+RMSE: 43.0527 (GBM) 
+RMSE: 40.4389 (XGBoost)
+
+
+온도 제거하고 열 개수 줄인경우?
+
+cols = ['State_Factor', 'building_class', 'facility_type', 'year_built', 'floor_area', 'energy_star_rating', 'days_with_fog', 'ELEVATION', 'building_id' 'avg_rating_by_facility','site_eui']
+
+RMSE: 44.7893 (KNN) 
+RMSE: 48.2798 (CART) 
+RMSE: 36.9937 (RF) 
+RMSE: 41.9924 (GBM) 
+RMSE: 38.57 (XGBoost) 
+
+위의 방식에서 energy_star_rating을 rf를 사용해서 채우지 않은 경우
+energy_star_rating기 56~58
+RMSE: 47.2551 (KNN) 
+RMSE: 52.6002 (CART) 
+RMSE: 39.4718 (RF) 
+RMSE: 42.1343 (GBM) 
+RMSE: 39.7957 (XGBoost) 
+
